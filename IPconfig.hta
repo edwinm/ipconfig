@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- IPconfig version 1.0 2004-05-30 -->
+<!-- Copyright 2004 Edwin Martin edwin@bitstorm.org -->
+<html>
+<head>
+  <title>IPconfig</title>
+  <hta:application id="ipconfig" 
+    applicationname="ipconfig" 
+    icon="ipconfig.ico"
+    singleinstance="yes"
+    border="dialog"
+    innerborder="no"
+    scroll="no"
+  >
+<script language="JavaScript" type="text/javascript">
+var shell = new ActiveXObject("WScript.Shell");
+function ipconfig( param ) {
+	var cmd = "ipconfig";
+	if ( param )
+		cmd += " /"+param;
+	var exe = shell.exec( cmd );
+	var out = "";
+	while( !exe.stdOut.atEndOfStream ) {
+		var s = exe.stdOut.readLine();
+		s = s.replace( /\r/gm, "" );
+		out += s+"\n";
+	}
+	document.getElementById( "output" ).value = out;
+}
+</script>
+<style type="text/css">
+body {
+	background-color: buttonface;
+	color: buttontext;
+	font-family: "MS Sans Serif", Arial, sans-serif;
+}
+button {
+	margin: 5px 5px 0 0;
+	width: 6em;
+}
+p {
+	font-size: smaller;
+}
+</style>
+</head>
+
+<body onload="window.resizeTo( document.getElementById('output').clientWidth+50, document.getElementById('output').clientHeight+140)">
+<form>
+
+<p>Show and renew IP-configuration.</p>
+
+<textarea id="output" readonly rows="10" cols="80"></textarea>
+<div style="float: right">
+<button onclick="window.close()" title="Close application">Close</button>
+</div>
+<button onclick="ipconfig()" title="Show configuration">IPconfig</button>
+<button onclick="ipconfig('all')" title="Show detailed configuration">All</button>
+<button onclick="ipconfig('renew')" title="Renew configuration">Renew</button>
+</form>
+</body>
+</html>
